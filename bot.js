@@ -44,18 +44,16 @@ let main = async () => {
 	});
 
 	bot.hears(/\/chapter\s[0-9][0-9]*/, (ctx) => {
-		new Promise((resolve, reject) => {
-			let local = ctx.message.text.split(/\s/)[1];
-			if (local > max_chapter){
-				ctx.reply("Invalid chapter.");
-				return resolve();
-			}
+		let local = ctx.message.text.split(/\s/)[1];
+		if (local > max_chapter){
+			ctx.reply("Invalid chapter.");
+		}
+		else {
 			chapter = local;
 			if (chapter == 0) ctx.reply(`Testing vocab in all chapters`);
 			else ctx.reply(`Testing vocab in chapter ${chapter}`)
-			return resolve();
-		})
-		.then(() => ask(ctx));
+		}
+		setTimeout(() => ask(ctx), 1000);
 	});
 
 	bot.hears(/[^\/].*/, (ctx) => {
