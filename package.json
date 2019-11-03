@@ -1,0 +1,23 @@
+{
+  "name": "GermanVocab",
+  "version": "1.0.0",
+  "description": "Pings you words in english, expecting a german translation",
+  "main": "bot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "bot",
+    "telegram",
+    "german",
+    "vocab",
+    "vocabulary",
+    "practice",
+    "GermanVocab"
+  ],
+  "author": "Mostapha Rammo",
+  "license": "ISC",
+  "dependencies": {
+    "telegraf": "^3.32.0"
+  }
+}
