@@ -48,11 +48,11 @@ let main = async () => {
 			let local = ctx.message.text.split(/\s/)[1];
 			if (local > max_chapter) return reject("Invalid Chapter");
 			chapter = local;
-			if (chapter == 0) return resolve(`Testing vocab in all chapters`);
-			else return resolve(`Testing vocab in chapter ${chapter}`)
+			if (chapter == 0) ctx.reply(`Testing vocab in all chapters`);
+			else ctx.reply(`Testing vocab in chapter ${chapter}`)
+			return resolve();
 		})
 		.then(txt => {
-			ctx.reply(txt);
 			ask(ctx);
 		})
 		.catch(txt => {
