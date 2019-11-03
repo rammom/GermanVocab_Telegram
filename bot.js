@@ -3,20 +3,34 @@ const bot = new Telegraf(process.env.GermanVocab_Token);
 
 // Gather vocabulary
 const csv = require("csvtojson");
+const max_chapter = 4;
 let vocab = [];
+let chapter_ends = [0];
 let choice = 0;
+let chapter = 0;
 
 async function setup() {
 	return new Promise(async (resolve, reject) => {
 		for (let i = 1; i < 5; ++i){
-			vocab = vocab.concat( await csv().fromFile(`./vocabulary/chapter${i}.csv`) )
+			let local = await csv().fromFile(`./vocabulary/chapter${i}.csv`)
+			chapter_ends.push(chapter_ends[chapter_ends.length-1]+local.length);
+			vocab = vocab.concat(local);
 		}
 		return resolve();
 	});
 }
 
 let ask = (ctx, prepend="") => {
-	choice = Math.floor(Math.random() * Math.floor(vocab.length));
+	let min, max;
+	if (chapter == 0) {
+		min = 0;
+		max = vocab.length;
+	}
+	else {
+		min = chapter_ends[chapter-1];
+		max = chapter_ends[chapter];
+	}
+	choice = min + Math.floor(Math.random() * Math.floor(max-min));
 	ctx.reply(prepend + "\n\n" + vocab[choice].en);
 }
 
@@ -29,7 +43,16 @@ let main = async () => {
 		ask(ctx);
 	});
 
-	bot.hears(/.*/, (ctx) => {
+	bot.hears(/\/chapter\s[0-9][0-9]*/, (ctx) => {
+		let local = ctx.message.text.split(/\s/)[1];
+		if (local > max_chapter) return ctx.reply("Invalid chapter");
+		chapter = local;
+		if (chapter == 0) ctx.reply(`Testing vocab in all chapters`)
+		else ctx.reply(`Testing vocab in chapter ${chapter}`)
+		ask(ctx);
+	});
+
+	bot.hears(/[^\/].*/, (ctx) => {
 		let recap = "=====\n";
 		if (ctx.message.text == vocab[choice].de) recap += "✅";
 		else recap += "❌";
