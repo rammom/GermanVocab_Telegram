@@ -18,6 +18,7 @@
   "author": "Mostapha Rammo",
   "license": "ISC",
   "dependencies": {
+    "csvtojson": "^2.0.10",
     "telegraf": "^3.32.0"
   }
 }
